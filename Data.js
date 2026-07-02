@@ -53,12 +53,9 @@ const SOLICITUDES = [
 ];
 
 // ── Clientes ──
-const CLIENTES = [
-  { id:'C-001', nombre:'Martino Mendoza',  empresa:'FinTech SA',        email:'m.mendoza@fintech.com',   plan:'Premium',     estado:'Activo',   ingreso:'12/01/2025' },
-  { id:'C-002', nombre:'Ticiano Malvessi', empresa:'MktGroup',          email:'t.malvessi@mktgroup.com', plan:'Profesional', estado:'Activo',   ingreso:'03/03/2025' },
-  { id:'C-003', nombre:'Solana Bruzera',   empresa:'Ágiles Consultora', email:'s.bruzera@agiles.com',    plan:'Básico',      estado:'Activo',   ingreso:'20/04/2025' },
-  { id:'C-004', nombre:'Luciano Panunzio', empresa:'IALab',             email:'l.panunzio@ialab.io',     plan:'Premium',     estado:'Inactivo', ingreso:'07/02/2025' },
-];
+// Ya NO son datos estáticos: se cargan desde la API real (GET /api/clientes)
+// en Api.js → cargarClientes().
+let CLIENTES = [];
 
 // ── Servicios ──
 // Ya NO son datos estáticos: se cargan desde la API real (GET /api/servicios)

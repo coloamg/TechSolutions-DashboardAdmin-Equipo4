@@ -12,5 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Trae los servicios reales desde la API (async, no bloquea el resto del render)
   cargarServicios();
+  cargarClientes();
 
 });

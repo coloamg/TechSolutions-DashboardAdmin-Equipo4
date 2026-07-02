@@ -35,6 +35,68 @@ function formatearArea(area) {
     .join(' ');
 }
 
+// ── Cache de planes (para resolver plan_id → nombre_plan) ──
+let _planesCache = null;
+ 
+async function getPlanesMap() {
+  if (_planesCache) return _planesCache;
+  try {
+    const data = await apiGet('/api/planes');
+    _planesCache = {};
+    data.forEach(p => { _planesCache[p.plan_id] = p.nombre_plan; });
+  } catch (err) {
+    console.error('No se pudieron cargar los planes:', err);
+    _planesCache = {};
+  }
+  return _planesCache;
+}
+
+// "Sun, 28 Jun 2026 00:00:00 GMT" → "28/06/2026"
+function formatearFecha(fechaStr) {
+  if (!fechaStr) return '—';
+  const d = new Date(fechaStr);
+  if (isNaN(d)) return '—';
+  const dd = String(d.getDate()).padStart(2, '0');
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const yyyy = d.getFullYear();
+  return `${dd}/${mm}/${yyyy}`;
+}
+// Arma el nombre completo ignorando los campos que vienen como "-"
+function nombreCompleto(c) {
+  const partes = [c.primer_nombre, c.segundo_nombre, c.apellido, c.segundo_apellido]
+    .filter(p => p && p !== '-');
+  return partes.join(' ');
+}
+
+// ── Mapeo: cliente de la API → forma que espera render.js ──
+// render.js espera: id, nombre, empresa, email, plan, estado, ingreso
+function mapClienteAPI(c, planesMap) {
+  return {
+    id: 'C-' + String(c.cliente_id).padStart(3, '0'),
+    nombre: nombreCompleto(c),
+    empresa: '—', // la API no tiene este dato
+    email: c.email,
+    plan: planesMap[c.plan_id] || '—',
+    estado: c.estado === 'activo' ? 'Activo' : 'Inactivo',
+    ingreso: formatearFecha(c.fecha_alta),
+  };
+}
+
+// ── Carga de Clientes desde la API ──
+async function cargarClientes() {
+  try {
+    const planesMap = await getPlanesMap();
+    const data = await apiGet('/api/clientes');
+    CLIENTES = data.map(c => mapClienteAPI(c, planesMap));
+  } catch (err) {
+    console.error('No se pudieron cargar los clientes desde la API:', err);
+    showToast('No se pudo conectar con la API de clientes', 'error');
+    CLIENTES = [];
+  }
+ 
+  renderTablaClientes();
+}
+
 // ── Carga de Servicios desde la API ──
 async function cargarServicios() {
   try {
@@ -45,6 +107,8 @@ async function cargarServicios() {
     showToast('No se pudo conectar con la API de servicios', 'error');
     SERVICIOS = [];
   }
+
+
 
   // Si la sección de Servicios ya está visible, la volvemos a pintar
   // con los datos reales.
