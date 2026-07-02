@@ -10,4 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Muestra la sección inicial
   showSection('dashboard');
 
+  // Trae los servicios reales desde la API (async, no bloquea el resto del render)
+  cargarServicios();
+
 });
