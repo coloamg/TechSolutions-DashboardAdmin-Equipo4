@@ -61,13 +61,10 @@ const CLIENTES = [
 ];
 
 // ── Servicios ──
-const SERVICIOS = [
-  { id:'S-01', nombre:'Consultoría Financiera', categoria:'Finanzas',   descripcion:'Asesoramiento contable y fiscal',      estado:'Activo'   },
-  { id:'S-02', nombre:'Marketing Digital',      categoria:'Marketing',  descripcion:'Estrategia y gestión de canales',      estado:'Activo'   },
-  { id:'S-03', nombre:'Gestión de RRHH',        categoria:'RRHH',       descripcion:'Procesos de selección y retención',    estado:'Activo'   },
-  { id:'S-04', nombre:'IA y Machine Learning',  categoria:'Tecnología', descripcion:'Implementación de modelos de IA',      estado:'Inactivo' },
-  { id:'S-05', nombre:'Proyectos Ágiles',       categoria:'Tecnología', descripcion:'Scrum, Kanban y metodologías ágiles',  estado:'Activo'   },
-];
+// Ya NO son datos estáticos: se cargan desde la API real (GET /api/servicios)
+// en Api.js → cargarServicios(). Arranca vacío para no mostrar datos falsos
+// mientras llega la respuesta.
+let SERVICIOS = [];
 
 // ── Conversaciones de WhatsApp ──
 const WA_CONVERSACIONES = [
